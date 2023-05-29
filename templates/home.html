@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Feed</title>
+    <style>
+        :root {
+            --color-primary: #004225;
+            --color-white: #ffffff;
+            --color-background: #f2f2f2;
+            --color-accent: #7cdb9c;
+        }
+
+        body {
+            background-color: var(--color-background);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 1s ease;
+        }
+        .container {
+            width: 90%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: flex-start;
+            opacity: 0;
+            transition: opacity 1s ease;
+            box-sizing: border-box;
+            padding: 2em;
+        }
+        .news-item {
+            background-color: var(--color-white);
+            color: var(--color-primary);
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px -5px rgba(0, 66, 37, 0.2);
+            transition: transform .2s ease-in-out;
+            box-sizing: border-box;
+            width: calc(50% - 4em);
+            margin: 1em;
+            border-left: 5px solid var(--color-accent);
+        }
+        .news-item:hover {
+            transform: scale(1.03);
+        }
+        .news-item h2 {
+            margin-bottom: 0.5em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.5em;
+            color: var(--color-accent);
+        }
+        .news-item p {
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="newsContainer">
+        <!-- News items will be dynamically inserted here -->
+    </div>
+
+<script>
+    var news = {{news | tojson}};
+    var editals = {{editals | tojson}};
+
+    var container = document.getElementById('newsContainer');
+
+    function renderItems(items) {
+        container.style.opacity = 0;
+        setTimeout(function() {
+            container.innerHTML = "";
+            items.forEach(function(item) {
+                container.innerHTML += `
+                    <div class="news-item">
+                        <h2>${item.title}</h2>
+                        <p>Data: ${item.date}</p>
+                        <p>Hora: ${item.time}</p>
+                    </div>
+                `;
+            });
+            container.style.opacity = 1;
+        }, 1000);
+    }
+
+    function cycleItems() {
+        renderItems(news);
+
+        setTimeout(function() {
+            renderItems(editals);
+            setTimeout(cycleItems, 10000);
+        }, 10000);
+    }
+
+    cycleItems(); // initial render
+</script>
+</body>
+</html>

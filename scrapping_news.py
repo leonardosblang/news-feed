@@ -42,25 +42,21 @@ def generate_common_selector(selectors):
 
 
 # Function to scrape data from the website
+# Function to scrape data from the website
 async def scrape_data(page, selectors: List[Dict]) -> List[Dict]:
-    common_sub_path = generate_common_selector([s["selector"] for s in selectors])
-    sub_selectors = [
-        {**s, "selector": s["selector"].replace(common_sub_path, "").strip()} for s in selectors
-    ]
-    common_sub_path = common_sub_path[:-2] if common_sub_path.endswith('>') else common_sub_path
-
-    elements = await page.querySelectorAll(common_sub_path) if common_sub_path else [page]
+    elements = await page.querySelectorAll(".tileItem")
 
     scraped_data = []
     for element in elements:
         data = {}
-        for selector in sub_selectors:
+        for selector in selectors:
             data_point = await get_content_for_type(element, page, selector["selector"], selector["type"])
             if data_point:
                 data[selector["name"]] = data_point
         scraped_data.append(data)
 
     return scraped_data
+
 
 SELECTORS = [{"name": "title", "description": "title", "selector": ".tileHeadline a", "type": "TEXT"},
              {"name": "date", "description": "date", "selector": ".tileInfo ul > li:nth-child(3)", "type": "TEXT"},
@@ -80,15 +76,11 @@ async def main():
         args=[],
         defaultViewport=None
     )
-
     page = await browser.newPage()
-
     await page.goto(LINK, waitUntil=["networkidle2"], timeout=15000)
-
     scraped_data = await scrape_data(page, SELECTORS)
-
-    print(scraped_data)
     await browser.close()
 
+    return scraped_data
 
-asyncio.get_event_loop().run_until_complete(main())
+

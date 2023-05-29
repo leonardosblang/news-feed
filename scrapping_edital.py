@@ -74,15 +74,14 @@ async def main():
         args=[],
         defaultViewport=None
     )
-
     page = await browser.newPage()
-
     await page.goto(LINK, waitUntil=["networkidle2"], timeout=15000)
-
     scraped_data = await scrape_data(page, SELECTORS)
-
-    print(scraped_data)
     await browser.close()
 
+    return scraped_data
 
-asyncio.get_event_loop().run_until_complete(main())
+# The new function to be called from the FastAPI server
+
+
+
