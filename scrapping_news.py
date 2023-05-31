@@ -70,7 +70,7 @@ LINK = "https://portal.cdm.ifsuldeminas.edu.br/noticias"
 
 async def main():
     browser = await launch(
-        headless=False,
+        headless=True,
         timeout=100000,
         ignoreDefaultArgs=["--enable-automation"],
         args=[],

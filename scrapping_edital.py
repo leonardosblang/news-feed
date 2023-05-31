@@ -68,7 +68,7 @@ LINK = "https://portal.cdm.ifsuldeminas.edu.br/editais/editais-do-campus"
 
 async def main():
     browser = await launch(
-        headless=False,
+        headless=True,
         timeout=100000,
         ignoreDefaultArgs=["--enable-automation"],
         args=[],
