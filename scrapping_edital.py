@@ -81,7 +81,7 @@ async def main():
 
     return scraped_data
 
-# The new function to be called from the FastAPI server
+
 
 
 

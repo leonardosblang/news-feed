@@ -11,11 +11,11 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/")
 async def read_item(request: Request):
-    # Call your scrapping functions
+
     news_data = await scrape_news()
     edital_data = await scrape_edital()
 
-    print(news_data)  # add this line to print out the news data
-    print(edital_data)  # add this line to print out the edital data
+    print(news_data)
+    print(edital_data)
 
     return templates.TemplateResponse("home.html", {"request": request, "news": news_data, "editals": edital_data})
